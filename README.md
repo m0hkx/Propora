@@ -38,9 +38,9 @@ marketing concerns:
 
 | Repository | Role | Stack | Source |
 | ---------- | ---- | ----- | ------ |
-| **[Propora](./Propora)** | The product — a session-authenticated dashboard for the full property-management workflow | React 19 · TypeScript · Vite · Tailwind CSS v4 · Zustand · React Router | [Propora-Frontend](https://github.com/m0hkx/Propora-Frontend) |
-| **[Propora-API](./Propora-API)** | The backend — a multi-tenant REST API with session auth, file uploads, and MongoDB persistence | Express 5 · TypeScript (ESM) · MongoDB (native driver) · express-session · multer | [Propora-Backend](https://github.com/m0hkx/Propora-Backend) |
-| **[ProporaWebsite](./ProporaWebsite)** | The pitch — a marketing/landing site introducing the product | React 19 · TypeScript · Vite · hand-rolled CSS design system | [Propora-Website](https://github.com/m0hkx/Propora-Website) |
+| **[Propora](https://github.com/m0hkx/Propora-Frontend)** | The product — a session-authenticated dashboard for the full property-management workflow | React 19 · TypeScript · Vite · Tailwind CSS v4 · Zustand · React Router | [Propora-Frontend](https://github.com/m0hkx/Propora-Frontend) |
+| **[Propora-API](https://github.com/m0hkx/Propora-Backend)** | The backend — a multi-tenant REST API with session auth, file uploads, and MongoDB persistence | Express 5 · TypeScript (ESM) · MongoDB (native driver) · express-session · multer | [Propora-Backend](https://github.com/m0hkx/Propora-Backend) |
+| **[ProporaWebsite](https://github.com/m0hkx/Propora-Website)** | The pitch — a marketing/landing site introducing the product | React 19 · TypeScript · Vite · hand-rolled CSS design system | [Propora-Website](https://github.com/m0hkx/Propora-Website) |
 
 Every screen in the dashboard is backed by a real, running API — not mocked
 data pretending to be a backend. The one deliberate exception is the inbox/chat
@@ -91,10 +91,10 @@ Each repo documents itself in depth — this README is the map, not a replacemen
 
 | Doc | Covers |
 | --- | ------ |
-| [`Propora-API/docs/`](./Propora-API/docs) | Backend architecture, auth, data model, and the full REST API reference |
-| [`Propora/README.md`](./Propora/README.md) | Dashboard-specific setup and feature tour |
-| [`Propora-API/README.md`](./Propora-API/README.md) | API setup, environment variables, and endpoint summary |
-| [`ProporaWebsite/README.md`](./ProporaWebsite/README.md) | Marketing site setup |
+| [`Propora-API/docs/`](https://github.com/m0hkx/Propora-Backend/tree/main/docs) | Backend architecture, auth, data model, and the full REST API reference |
+| [`Propora Dashboard/README.md`](https://github.com/m0hkx/Propora-Frontend) | Dashboard-specific setup and feature tour |
+| [`Propora-API/README.md`](https://github.com/m0hkx/Propora-Backend) | API setup, environment variables, and endpoint summary |
+| [`ProporaWebsite/README.md`](https://github.com/m0hkx/Propora-Website) | Marketing site setup |
 
 ## Running the full stack locally
 
