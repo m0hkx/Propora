@@ -1,0 +1,9 @@
+[submodule "Propora-Frontend"]
+	path = Propora-Frontend
+	url = https://github.com/m0hkx/Propora-Frontend.git
+[submodule "Propora-Backend"]
+	path = Propora-Backend
+	url = https://github.com/m0hkx/Propora-Backend.git
+[submodule "Propora-Website"]
+	path = Propora-Website
+	url = https://github.com/m0hkx/Propora-Website.git
