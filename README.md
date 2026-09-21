@@ -38,14 +38,16 @@ marketing concerns:
 
 | Repository | Role | Stack | Source |
 | ---------- | ---- | ----- | ------ |
-| **[Propora](https://github.com/m0hkx/Propora-Frontend)** | The product — a session-authenticated dashboard for the full property-management workflow | React 19 · TypeScript · Vite · Tailwind CSS v4 · Zustand · React Router | [Propora-Frontend](https://github.com/m0hkx/Propora-Frontend) |
+| **[Propora](https://github.com/m0hkx/Propora-Frontend)** | The product — a fully interactive dashboard covering the full property-management workflow | React 19 · TypeScript · Vite · Tailwind CSS v4 · Zustand · React Router | [Propora-Frontend](https://github.com/m0hkx/Propora-Frontend) |
 | **[Propora-API](https://github.com/m0hkx/Propora-Backend)** | The backend — a multi-tenant REST API with session auth, file uploads, and MongoDB persistence | Express 5 · TypeScript (ESM) · MongoDB (native driver) · express-session · multer | [Propora-Backend](https://github.com/m0hkx/Propora-Backend) |
 | **[ProporaWebsite](https://github.com/m0hkx/Propora-Website)** | The pitch — a marketing/landing site introducing the product | React 19 · TypeScript · Vite · hand-rolled CSS design system | [Propora-Website](https://github.com/m0hkx/Propora-Website) |
 
-Every screen in the dashboard is backed by a real, running API — not mocked
-data pretending to be a backend. The one deliberate exception is the inbox/chat
-feature, which is called out explicitly in the frontend's own docs rather than
-quietly faked.
+Each app is a real, independently-built piece rather than a demo shell: the
+API is a working multi-tenant backend with its own auth and persistence, and
+the dashboard is a fully interactive, realistic-data build in its own right.
+The dashboard currently runs on its own seeded dataset rather than calling the
+live API — see [its docs](./docs/frontend-propora) for why that's a deliberate
+frontend-only build, not a shortcut.
 
 ## Product tour
 
@@ -60,16 +62,22 @@ quietly faked.
 | **Payments** | Collection KPIs, status/method filters, record-payment flow with automatic overdue notifications |
 | **Maintenance** | Work-queue triage, staff assignment, status lifecycle (Open → In Progress → Paused/Completed) with a full history trail |
 | **Documents** | Property/tenant-scoped document vault with upload, archive, and expiration tracking |
-| **Notifications** | Server-generated activity feed — new tenants, overdue payments, new maintenance requests |
+| **Notifications** | Activity feed for new tenants, overdue payments, new maintenance requests |
 
 ## System overview
+
+**Backend (Propora-API)**
 
 - **Auth** — `express-session` cookie, `bcryptjs` password hashing; every document in
   MongoDB carries a `userId`, and every query is scoped to the logged-in user.
 - **Uploads** — property images and documents are stored on disk (`multer`) and served
-  statically; the frontend resolves them into absolute URLs.
-- **State** — the dashboard's Zustand store is hydrated entirely from the API on login;
-  every mutation is an `await` against a real endpoint, not a local reducer.
+  statically.
+
+**Frontend (Propora)**
+
+- **State** — the dashboard's Zustand store is seeded from `src/data/mock.ts`; every
+  write is synchronous, and a subset of slices (units, maintenance, staff) persists
+  to `localStorage`. It does not currently call the API above.
 
 ## Design system
 
@@ -82,55 +90,60 @@ One teal identity carried through every surface, across all three repos:
 - **Logo** — a single geometric "P" mark (`docs/images/logo.png`), used flat on the
   marketing site and as a white cutout on the teal brand badge in-app
 
-Full token reference: [`Propora/docs/design-system/colors.md`](./Propora/docs/design-system/colors.md)
-and [`ProporaWebsite/design-system/colors.md`](./ProporaWebsite/design-system/colors.md).
+Full token reference: [`docs/design-system/colors.md`](./docs/design-system/colors.md) —
+one shared file, since the frontend and the marketing site consume the same tokens verbatim.
 
 ## Documentation map
 
-Each repo documents itself in depth — this README is the map, not a replacement:
+Each repo documents itself in depth; [`docs/`](./docs) mirrors all of it in one
+place so you don't have to hop repos to read it:
 
 | Doc | Covers |
 | --- | ------ |
-| [`Propora-API/docs/`](https://github.com/m0hkx/Propora-Backend/tree/main/docs) | Backend architecture, auth, data model, and the full REST API reference |
-| [`Propora Dashboard/README.md`](https://github.com/m0hkx/Propora-Frontend) | Dashboard-specific setup and feature tour |
-| [`Propora-API/README.md`](https://github.com/m0hkx/Propora-Backend) | API setup, environment variables, and endpoint summary |
-| [`ProporaWebsite/README.md`](https://github.com/m0hkx/Propora-Website) | Marketing site setup |
+| [`docs/`](./docs) | The documentation hub — start here |
+| [`docs/api/`](./docs/api) | Backend architecture, auth, data model, and the full REST API reference |
+| [`docs/frontend-propora/`](./docs/frontend-propora) | Dashboard architecture, data model, business logic, and user flows |
+| [`docs/website/`](./docs/website) | Marketing site's structure and page anatomy |
+| [Propora-Frontend/README.md](https://github.com/m0hkx/Propora-Frontend) | Dashboard-specific setup and feature tour |
+| [Propora-Backend/README.md](https://github.com/m0hkx/Propora-Backend) | API setup, environment variables, and endpoint summary |
+| [Propora-Website/README.md](https://github.com/m0hkx/Propora-Website) | Marketing site setup |
 
 ## Running the full stack locally
 
-The three apps are independent git repositories that live side by side. To run the
-whole product end to end:
+The three apps are independent git repositories that live side by side, and each
+runs standalone — none of the `npm run dev` commands below depend on another:
 
 ```bash
 # 1. Backend — needs a MongoDB connection string and a session secret
-cd Propora-API
+cd Propora-Backend
 cp .env.example .env   # fill in MONGODB_URI and SESSION_SECRET
 npm install
 npm run dev             # http://localhost:3000
 
-# 2. Dashboard — talks to the API above
-cd ../Propora
+# 2. Dashboard — runs on its own seeded dataset, no .env needed
+cd ../Propora-Frontend
 npm install
 npm run dev              # http://localhost:5173
 
 # 3. Marketing site — standalone, no backend dependency
-cd ../ProporaWebsite
+cd ../Propora-Website
 npm install
 npm run dev              # http://localhost:5174 (or next free port)
 ```
 
-The API's CORS policy is locked to `http://localhost:5173` and issues a
-credentialed session cookie, so the dashboard must be served from that origin
-in development.
+The API's CORS policy is pre-configured for a credentialed session cookie from
+`http://localhost:5173` — the dashboard's dev origin — for when the two are wired
+together.
 
 ## Why this project
 
 This repo set is a deliberately realistic slice of what shipping a small SaaS
 product looks like solo: a documented, multi-tenant API; a polished, fully
-interactive frontend consuming it for real; and a marketing surface that sells
-the same story visually. It's meant to demonstrate range — product design,
-frontend craft, backend architecture, and the judgment to document trade-offs
-honestly — rather than a single narrow skill.
+interactive frontend demonstrating the entire workflow end to end; and a
+marketing surface that sells the same story visually. It's meant to
+demonstrate range — product design, frontend craft, backend architecture, and
+the judgment to document trade-offs honestly — rather than a single narrow
+skill.
 
 ---
 
