@@ -22,6 +22,15 @@ A full-stack web app that puts properties, tenants, leases, rent, repairs and do
 | [`Propora-API/`](./Propora-API) | The REST API | Express 5 · TypeScript · MongoDB · express-session | [Propora-Backend](https://github.com/m0hkx/Propora-Backend) |
 | [`docs/`](./docs) | Project documentation | | |
 
+## Key documents
+
+| Document | Read it for |
+| --- | --- |
+| [Features](./docs/03-features.md) | What the app does |
+| [API reference](./docs/06-api-reference.md) | Endpoints, requests and responses |
+| [System design](./docs/04-system-design.md) | How the pieces fit together |
+| [Database design](./docs/05-database-design.md) | Collections, fields and relationships |
+
 ## Demo account
 
 | Email | Password |
